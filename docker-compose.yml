@@ -1,0 +1,83 @@
+version: '2.1'
+
+services:
+  frontend:
+    build:
+      context: ./donor-reporting-portal-frontend
+      dockerfile: ./docker/Dockerfile
+      args:
+        DEVELOP: 1
+        VERSION: ${TARGET}
+    image: unicef/donor-reporting-portal-frontend:dev
+    volumes:
+      - "./donor-reporting-portal-frontend:/code"
+    command: polymer serve -H 0.0.0.0 -p 8080
+    container_name: donor_reporting_portal_frontend
+
+  backend:
+    build:
+      context: ./donor-reporting-portal-backend
+      dockerfile: ./docker/Dockerfile
+      args:
+        DEVELOP: 1
+    image: unicef/donor-reporting-portal-backend:dev
+    env_file: .env
+
+    environment:
+      DATABASE_URL: postgres://postgres:@db:5432/donor_reporting_portal
+      DEBUG: 1
+      CACHE_URL: redis://redis:6379/1
+      CELERY_BROKER_URL: redis://redis:6379/2
+      CELERY_RESULT_BACKEND: redis://redis:6379/3
+      CSRF_COOKIE_SECURE: 0
+      REQUIREMENTS: -d
+      AZURE_TENANT: nikunicef.onmicrosoft.com
+      FLOWER_PWD: 123
+      SECURE_SSL_REDIRECT: 0
+      SESSION_COOKIE_HTTPONLY: 0
+      SESSION_COOKIE_SECURE: 0
+      STATIC_ROOT: /var/donor_reporting_portal/static/
+      MEDIA_ROOT: /var/donor_reporting_portal/media/
+      MEDIA_URL: http://localhost:8081/media/
+      SUPERVISOR_PWD: 123
+    command: stack
+    ports:
+      - "8000:8000"
+      - "15000:15000"
+      - "5555:5555"
+    volumes:
+      - "./donor-reporting-portal-backend:/code"
+      - "./volumes/backend/var/donor_reporting_portal/:/var/donor_reporting_portal"
+    depends_on:
+      - db
+      - redis
+    container_name: donor_reporting_portal_backend
+
+  proxy:
+    build:
+      context: ./proxy
+      dockerfile: ./Dockerfile
+    image: unicef/donor-reporting-portal-proxy:dev
+    ports:
+      - "8081:80"
+    depends_on:
+      - backend
+      - frontend
+    container_name: donor_reporting_portal_proxy
+
+  db:
+    image: mdillon/postgis:9.6-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_DB: donor_reporting_portal
+    volumes:
+      - "./volumes/db2/data:/var/lib/postgresql/data"
+    container_name: donor_reporting_portal_db
+
+  redis:
+    image: redis
+    container_name: donor_reporting_portal_redis
+    hostname: redis
+    command: ["redis-server", "--appendonly", "yes"]
+    ports:
+      - "6379:6379"
