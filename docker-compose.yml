@@ -4,7 +4,7 @@ services:
   frontend:
     build:
       context: ./donor-reporting-portal-frontend
-      dockerfile: ./docker/Dockerfile
+      dockerfile: ./Dockerfile-dev
       args:
         DEVELOP: 1
         VERSION: ${TARGET}
@@ -19,7 +19,7 @@ services:
   backend:
     build:
       context: ./donor-reporting-portal-backend
-      dockerfile: ./docker/Dockerfile
+      dockerfile: ./Dockerfile
       args:
         DEVELOP: 1
     image: unicef/donor-reporting-portal-backend:dev
