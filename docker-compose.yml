@@ -4,24 +4,22 @@ services:
   frontend:
     build:
       context: ./donor-reporting-portal-frontend
-      dockerfile: ./Dockerfile-dev
       args:
         DEVELOP: 1
         VERSION: ${TARGET}
     image: unicef/donor-reporting-portal-frontend:dev
     volumes:
       - "./donor-reporting-portal-frontend:/code"
-    ports: 
-      - 3000:3000
     command: ${FE_COMMAND:-sh -c "npm start"}
     container_name: donor_reporting_portal_frontend
+    labels:
+      - traefik.backend=frontend
+      - traefik.frontend.rule=PathPrefix:/
+      - traefik.priority=1
+      - traefik.enable=true
+      - traefik.port=3000
 
   backend:
-    build:
-      context: ./donor-reporting-portal-backend
-      dockerfile: ./Dockerfile
-      args:
-        DEVELOP: 1
     image: unicef/donor-reporting-portal-backend:dev
     env_file: .env
 
@@ -42,11 +40,7 @@ services:
       MEDIA_ROOT: /var/donor_reporting_portal/media/
       MEDIA_URL: http://localhost:8081/media/
       SUPERVISOR_PWD: 123
-    command: stack
-    ports:
-      - "8000:8000"
-      - "15000:15000"
-      - "5555:5555"
+
     volumes:
       - "./donor-reporting-portal-backend:/code"
       - "./volumes/backend/var/donor_reporting_portal/:/var/donor_reporting_portal"
@@ -54,18 +48,23 @@ services:
       - db
       - redis
     container_name: donor_reporting_portal_backend
+    labels:
+      - traefik.backend=backend
+      - traefik.frontend.rule=PathPrefix:/api/
+      - traefik.frontend.rule=PathPrefix:/admin/
+      - traefik.priority=2
+      - traefik.enable=true
+      - traefik.port=8000
 
   proxy:
-    build:
-      context: ./proxy
-      dockerfile: ./Dockerfile
-    image: unicef/donor-reporting-portal-proxy:dev
+    image: traefik:v1.7
+    command: --api --docker
     ports:
-      - "8081:80"
-    depends_on:
-      - backend
-      - frontend
+      - "8082:80"
+      - "8080:8080"
     container_name: donor_reporting_portal_proxy
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
 
   db:
     image: mdillon/postgis:9.6-alpine
@@ -81,5 +80,5 @@ services:
     container_name: donor_reporting_portal_redis
     hostname: redis
     command: ["redis-server", "--appendonly", "yes"]
-    ports:
-      - "6379:6379"
+#    ports:
+#      - "6379:6379"

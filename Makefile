@@ -69,3 +69,12 @@ status:
 	@cd donor-reporting-portal-backend && git log -1
 	@echo "Frontend: (`cd donor-reporting-portal-frontend && git st -b && cd ..`)"
 	@cd donor-reporting-portal-frontend && git log -1
+
+
+update-backend:
+	@docker rmi $(docker images |grep 'donor-reporting-portal-backend')
+	@docker ps -a | awk ‘{ print $1,$2 }’ | grep <donor-reporting-portal-backend> | awk ‘{print $1 }’ | xargs -I {} docker rm -f {}
+
+
+ssh-backend:
+	@docker exec -it donor_reporting_portal_backend /bin/bash

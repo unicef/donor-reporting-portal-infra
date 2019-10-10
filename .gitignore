@@ -21,3 +21,4 @@ settings_local.py
 .idea/
 !deploy/files/.DRP_credentials.json
 volumes
+.env
