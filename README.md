@@ -4,7 +4,7 @@ Donor Reporting Portal Deployment Stack
 
 ### Full Stack Links
 
-  - Deployement - https://github.com/unicef/donor-reporting-portal-infra
+  - Development - https://github.com/unicef/donor-reporting-portal-infra
   - Backend - https://github.com/unicef/donor-reporting-portal-backend
   - Frontend - https://github.com/unicef/donor-reporting-portal-frontend
   
@@ -13,6 +13,16 @@ Donor Reporting Portal Deployment Stack
 Development
 ============================================
 
+
+Initialization
+------------------------------
+
+Be sure you have a `.env` file in the project home.
+
+```bash
+git pull --recurse-submodules
+```
+ 
 
 Start development
 ------------------------------

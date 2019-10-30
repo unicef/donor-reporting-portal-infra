@@ -43,7 +43,7 @@ fullclean:
 	-docker rmi --force `docker images -f "ancestor=unicef/donor-reporting-portal-frontend:dev" -q`
 	-docker rmi --force `docker images -f "ancestor=unicef/donor-reporting-portal-db:dev" -q`
 	-docker rmi --force `docker images -f "ancestor=unicef/donor-reporting-portal-proxy:dev" -q`
-	-docker rmi --force `docker images -f "reference=unicef/*" -q`
+	-docker rmi --force `docker images -f "reference=unicef/donor-reporting-portal-*" -q`
 	rm -rf volumes
 
 
