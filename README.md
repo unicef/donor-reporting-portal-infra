@@ -5,7 +5,7 @@ Donor Reporting Portal Deployment Stack
 ### Full Stack Links
 
   - Development - https://github.com/unicef/donor-reporting-portal-infra
-  - Backend - https://github.com/unicef/donor-reporting-portal-backend
+  - Backend - https://github.com/unicef/donor-reporting-portal-be
   - Frontend - https://github.com/unicef/donor-reporting-portal-frontend
   
 

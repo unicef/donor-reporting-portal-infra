@@ -2,15 +2,10 @@ version: '2.1'
 
 services:
   frontend:
-    build:
-      context: ./donor-reporting-portal-frontend
-      args:
-        DEVELOP: 1
-        VERSION: ${TARGET}
     image: unicef/donor-reporting-portal-frontend:dev
     volumes:
       - "./donor-reporting-portal-frontend:/code"
-    command: ${FE_COMMAND:-sh -c "npm start"}
+#    command: ${FE_COMMAND:-sh -c "npm start"}
     container_name: donor_reporting_portal_frontend
     labels:
       - traefik.backend=frontend
@@ -79,5 +74,3 @@ services:
     container_name: donor_reporting_portal_redis
     hostname: redis
     command: ["redis-server", "--appendonly", "yes"]
-#    ports:
-#      - "6379:6379"
