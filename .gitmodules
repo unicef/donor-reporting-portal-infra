@@ -1,6 +1,3 @@
-[submodule "donor-reporting-portal-backend"]
-	path = donor-reporting-portal-backend
-	url = git@github.com:unicef/donor-reporting-portal-be.git
 [submodule "donor-reporting-portal-frontend"]
 	path = donor-reporting-portal-frontend
 	url = git@github.com:unicef/donor-reporting-portal-frontend.git
