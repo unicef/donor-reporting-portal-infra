@@ -3,8 +3,8 @@ version: '2.1'
 services:
   frontend:
     image: unicef/donor-reporting-portal-frontend:dev
-    volumes:
-      - "./donor-reporting-portal-frontend:/code"
+#    volumes:
+#      - "./donor-reporting-portal-frontend:/code"
 #    command: ${FE_COMMAND:-sh -c "npm start"}
     container_name: donor_reporting_portal_frontend
     labels:
