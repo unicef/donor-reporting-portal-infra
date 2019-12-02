@@ -16,7 +16,7 @@ services:
 
   backend:
     image: unicef/donor-reporting-portal-backend:dev
-    env_file: .donor-reporting-portal-backend/.env
+    env_file: ./donor-reporting-portal-backend/.env
 
     environment:
       DATABASE_URL: postgres://postgres:@db:5432/donor_reporting_portal
