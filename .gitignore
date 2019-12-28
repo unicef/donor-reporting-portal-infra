@@ -22,3 +22,5 @@ settings_local.py
 !deploy/files/.DRP_credentials.json
 volumes
 .env
+.envrc
+.venv/
