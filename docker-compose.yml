@@ -3,9 +3,6 @@ version: '2.1'
 services:
   frontend:
     image: unicef/donor-reporting-portal-frontend:dev
-#    volumes:
-#      - "./donor-reporting-portal-frontend:/code"
-#    command: ${FE_COMMAND:-sh -c "npm start"}
     container_name: donor_reporting_portal_frontend
     labels:
       - traefik.backend=frontend
@@ -21,20 +18,16 @@ services:
     environment:
       DATABASE_URL: postgres://postgres:@db:5432/donor_reporting_portal
       DEBUG: 1
-      CACHE_URL: redis://redis:6379/1
+      REDIS_URL: redis://redis:6379/1
       CELERY_BROKER_URL: redis://redis:6379/2
       CELERY_RESULT_BACKEND: redis://redis:6379/3
       CSRF_COOKIE_SECURE: 0
-      REQUIREMENTS: -d
-      AZURE_TENANT: nikunicef.onmicrosoft.com
-      FLOWER_PWD: 123
       SECURE_SSL_REDIRECT: 0
       SESSION_COOKIE_HTTPONLY: 0
       SESSION_COOKIE_SECURE: 0
       STATIC_ROOT: /var/donor_reporting_portal/static/
       MEDIA_ROOT: /var/donor_reporting_portal/media/
-      MEDIA_URL: http://localhost:8081/media/
-      SUPERVISOR_PWD: 123
+      MEDIA_URL: http://localhost:8082/media/
 
     volumes:
       - "./donor-reporting-portal-backend:/code"
@@ -61,7 +54,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
 
   db:
-    image: mdillon/postgis:9.6-alpine
+    image: postgres:12-alpine
     environment:
       POSTGRES_USER: postgres
       POSTGRES_DB: donor_reporting_portal
