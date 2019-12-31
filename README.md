@@ -38,3 +38,11 @@ if you updated the backend to update the database
    make ssh-backend
    django-admin init-setup --all
 ```
+
+
+Start Environment
+------------------------------
+
+```bash
+   docker-compose up
+```
