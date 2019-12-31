@@ -17,40 +17,24 @@ Development
 Initialization
 ------------------------------
 
-Be sure you have a `.env` file in the project home.
+Be sure you have a `.env` file in the backend folder (check .env_template).
 
 ```bash
 git pull --recurse-submodules
 ```
  
 
-Start development
+Update Environment
 ------------------------------
-
-```bash
-   docker-compose up
-```
-
-
-Update Backend
------------------------------
-If you need to update the development image to latest `:dev` version use:
 
 ```bash
    docker-compose pull
 ```
 
-then most probably you will need to run migrations
+
+if you updated the backend to update the database
 
 ```bash
    make ssh-backend
-   django-admin migrate
-```
-
-Update Frontend
------------------------------
-```bash
-   cd donor-reporting-portal-frontend
-   git pull
-   npm install
+   django-admin init-setup --all
 ```
