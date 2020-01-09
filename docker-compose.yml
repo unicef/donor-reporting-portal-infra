@@ -64,7 +64,7 @@ services:
     container_name: donor_reporting_portal_db
 
   redis:
-    image: redis
+    image: redis:5.0-alpine
     container_name: donor_reporting_portal_redis
     hostname: redis
     command: ["redis-server", "--appendonly", "yes"]
