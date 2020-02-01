@@ -15,10 +15,17 @@ version:
 	@cd donor-reporting-portal-frontend && git checkout -q ${VERSION}
 	$(MAKE) status
 
+info:
+	@echo 'docker images'
+	@docker images | grep donor-reporting-portal
+	@echo '------------------'
+	@echo 'docker containers'
+	@docker ps -a | grep donor_reporting_portal
+
 clean:
 	@docker rmi unicef/donor-reporting-portal-frontend:dev --force
 	@docker rmi unicef/donor-reporting-portal-backend:dev --force
-	-@docker images | grep donor-reporting-portal
+	@docker images | grep donor-reporting-portal
 
 
 update:
