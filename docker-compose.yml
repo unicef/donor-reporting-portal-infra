@@ -2,8 +2,14 @@ version: '2.1'
 
 services:
   frontend:
+    build:
+      context: ./donor-reporting-portal-frontend
+      dockerfile: Dockerfile-dev
     image: unicef/donor-reporting-portal-frontend:dev
     container_name: donor_reporting_portal_frontend
+    volumes:
+      - "./donor-reporting-portal-frontend:/code"
+    command: sh -c "npm run start"
     labels:
       - traefik.backend=frontend
       - traefik.frontend.rule=PathPrefix:/
