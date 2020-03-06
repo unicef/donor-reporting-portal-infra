@@ -16,7 +16,7 @@ services:
     env_file: ./donor-reporting-portal-backend/.env
 
     environment:
-      DATABASE_URL: postgres://postgres:@db:5432/donor_reporting_portal
+      DATABASE_URL: postgres://postgres:pass@db:5432/donor_reporting_portal
       HOST: http://localhost:8082
       DEBUG: 1
       REDIS_URL: redis://redis:6379/1
@@ -58,6 +58,7 @@ services:
     image: postgres:12-alpine
     environment:
       POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: pass
       POSTGRES_DB: donor_reporting_portal
     volumes:
       - "./volumes/db2/data:/var/lib/postgresql/data"

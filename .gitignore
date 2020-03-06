@@ -24,3 +24,4 @@ volumes
 .env
 .envrc
 .venv/
+venv/
