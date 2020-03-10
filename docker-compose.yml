@@ -39,7 +39,7 @@ services:
     container_name: donor_reporting_portal_backend
     labels:
       - traefik.backend=backend
-      - traefik.frontend.rule=PathPrefix:/api/,/admin/,/static/,/sociallogin/,/socialcomplete/
+      - traefik.frontend.rule=PathPrefix:/api/,/admin/,/static/,/sociallogin/,/socialcomplete/,/social/
       - traefik.priority=2
       - traefik.enable=true
       - traefik.port=8000
