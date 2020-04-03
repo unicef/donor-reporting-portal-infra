@@ -10,6 +10,8 @@ services:
       - traefik.priority=1
       - traefik.enable=true
       - traefik.port=3000
+    environment:
+      TENANT_NAME: unitst
 
   backend:
     image: unicef/donor-reporting-portal-backend:dev
