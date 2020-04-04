@@ -2,7 +2,7 @@ version: '2.1'
 
 services:
   frontend:
-    image: unicef/donor-reporting-portal-frontend:dev
+    image: unicef/donor-reporting-portal-frontend:develop
     container_name: donor_reporting_portal_frontend
     labels:
       - traefik.backend=frontend

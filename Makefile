@@ -85,3 +85,6 @@ update-backend:
 
 ssh-backend:
 	@docker exec -it donor_reporting_portal_backend /bin/bash
+
+ssh-frontend:
+	@docker exec -it donor_reporting_portal_frontend /bin/bash
