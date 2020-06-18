@@ -5,10 +5,11 @@ services:
     image: unicef/donor-reporting-portal-frontend:dev
     container_name: donor_reporting_portal_frontend
     labels:
-      - traefik.backend=frontend
-      - traefik.frontend.rule=PathPrefix:/
-      - traefik.priority=1
-      - traefik.enable=true
+      - "traefik.http.routers.frontend.rule=PathPrefix(`/`)"
+      - traefik.http.routers.frontend.service=frontend
+      - traefik.http.routers.frontend.middlewares=frontend-stripprefix
+      - traefik.http.middlewares.frontend-stripprefix.stripprefix.prefixes=/
+      - traefik.http.services.frontend.loadBalancer.server.port=3000
       - traefik.port=3000
 
   backend:
@@ -39,15 +40,14 @@ services:
       - redis
     container_name: donor_reporting_portal_backend
     labels:
-      - traefik.backend=backend
-      - traefik.frontend.rule=PathPrefix:/api/,/admin/,/static/,/sociallogin/,/socialcomplete/,/social/,/accounts/
-      - traefik.priority=2
+      - "traefik.http.routers.backend.rule=PathPrefix(`/api/`,`/admin/`,`/static/`,`/sociallogin/`,`/socialcomplete/`,`/social/`,`/accounts/`)"
+      - traefik.http.routers.backend.service=backend
+      - traefik.http.services.backend.loadBalancer.server.port=8080
       - traefik.enable=true
-      - traefik.port=8000
 
   proxy:
-    image: traefik:v1.7
-    command: --api --docker
+    image: traefik:2.1
+    command: --api --providers.docker
     ports:
       - "8082:80"
       - "8080:8080"
