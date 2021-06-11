@@ -10,8 +10,6 @@ services:
       - traefik.priority=1
       - traefik.enable=true
       - traefik.port=3000
-    environment:
-      TENANT_NAME: unitst
 
   backend:
     image: unicef/donor-reporting-portal-backend:dev
@@ -21,6 +19,7 @@ services:
       DATABASE_URL: postgres://postgres:pass@db:5432/donor_reporting_portal
       HOST: http://localhost:8082
       DEBUG: 1
+      CACHE_URL: redis://redis:6379/1
       REDIS_URL: redis://redis:6379/1
       CELERY_BROKER_URL: redis://redis:6379/2
       CELERY_RESULT_BACKEND: redis://redis:6379/3
@@ -58,13 +57,13 @@ services:
 
   db:
     image: postgres:12-alpine
+    container_name: donor_reporting_portal_db
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: pass
       POSTGRES_DB: donor_reporting_portal
     volumes:
       - "./volumes/db2/data:/var/lib/postgresql/data"
-    container_name: donor_reporting_portal_db
 
   redis:
     image: redis:5.0-alpine
