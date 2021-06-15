@@ -1,15 +1,6 @@
 version: '2.1'
 
 services:
-  frontend:
-    image: unicef/donor-reporting-portal-frontend:develop
-    container_name: donor_reporting_portal_frontend
-    labels:
-      - traefik.backend=frontend
-      - traefik.frontend.rule=PathPrefix:/
-      - traefik.priority=1
-      - traefik.enable=true
-      - traefik.port=3000
 
   backend:
     image: unicef/donor-reporting-portal-backend:dev
@@ -17,7 +8,7 @@ services:
 
     environment:
       DATABASE_URL: postgres://postgres:pass@db:5432/donor_reporting_portal
-      HOST: http://localhost:8082
+      HOST: http://localhost
       DEBUG: 1
       CACHE_URL: redis://redis:6379/1
       REDIS_URL: redis://redis:6379/1
@@ -29,7 +20,7 @@ services:
       SESSION_COOKIE_SECURE: 0
       STATIC_ROOT: /var/donor_reporting_portal/static/
       MEDIA_ROOT: /var/donor_reporting_portal/media/
-      MEDIA_URL: http://localhost:8082/media/
+      MEDIA_URL: http://localhost/media/
 
     volumes:
       - "./donor-reporting-portal-backend:/code"
@@ -39,21 +30,28 @@ services:
       - redis
     container_name: donor_reporting_portal_backend
     labels:
-      - traefik.backend=backend
-      - traefik.frontend.rule=PathPrefix:/api/,/admin/,/static/,/sociallogin/,/socialcomplete/,/social/,/accounts/,/manage/
-      - traefik.priority=2
-      - traefik.enable=true
-      - traefik.port=8000
+      traefik.http.routers.backend.rule: Host(`localhost`) && PathPrefix(`/api/`, `/admin/`, `/static/`, `/sociallogin/`, `/socialcomplete/`, `/social/`, `/accounts/`, `/manage/`)
+
+  frontend:
+    image: unicef/donor-reporting-portal-frontend:develop
+    container_name: donor_reporting_portal_frontend
+    labels:
+      traefik.http.routers.frontend.rule: Host(`localhost`)
 
   proxy:
-    image: traefik:v1.7
-    command: --api --docker
-    ports:
-      - "8082:80"
-      - "8080:8080"
+    image: traefik:v2.4
     container_name: donor_reporting_portal_proxy
+    command:
+      - --api.insecure=true
+      - --entrypoints.web.address=:80
+      - --providers.docker
+    ports:
+      - "80:80"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+    labels:
+      traefik.http.routers.dash.rule: Host(`dash.localhost`)
+      traefik.http.routers.dash.service: api@internal
 
   db:
     image: postgres:12-alpine
@@ -66,7 +64,7 @@ services:
       - "./volumes/db2/data:/var/lib/postgresql/data"
 
   redis:
-    image: redis:5.0-alpine
+    image: redis:6.2-alpine
     container_name: donor_reporting_portal_redis
     hostname: redis
     command: ["redis-server", "--appendonly", "yes"]
