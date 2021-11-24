@@ -38,6 +38,19 @@ services:
     labels:
       traefik.http.routers.frontend.rule: Host(`localhost`)
 
+#  frontend:
+#    build:
+#      context: ./donor-reporting-portal-frontend
+#      dockerfile: Dockerfile-dev
+#    image: unicef/donor-reporting-portal-frontend:build
+#    container_name: donor_reporting_portal_frontend_build
+#    volumes:
+#      - "./donor-reporting-portal-frontend:/code"
+#    command: sh -c "npm run start"
+#    labels:
+#      traefik.http.routers.frontend.rule: Host(`localhost`)
+#      traefik.http.services.fronted.loadBalancer.server.port: 3000
+
   proxy:
     image: traefik:v2.4
     container_name: donor_reporting_portal_proxy
