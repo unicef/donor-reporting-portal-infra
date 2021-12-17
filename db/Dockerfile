@@ -1,4 +1,4 @@
-FROM postgres:9.6-alpine
+FROM postgres:14.2-alpine
 
 COPY healthcheck.sh /usr/local/bin/
 RUN apk add --no-cache bash \
