@@ -30,7 +30,7 @@ services:
       - redis
     container_name: donor_reporting_portal_backend
     labels:
-      traefik.http.routers.backend.rule: Host(`localhost`) && PathPrefix(`/api/`, `/admin/`, `/static/`, `/sociallogin/`, `/socialcomplete/`, `/social/`, `/accounts/`, `/manage/`)
+      traefik.http.routers.backend.rule: Host(`localhost`) && PathPrefix(`/api/`, `/admin/`, `/static/`, `/security/`, `/social/`, `/accounts/`, `/manage/`)
 
   frontend:
     image: unicef/donor-reporting-portal-frontend:develop
