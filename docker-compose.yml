@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
 
   backend:
@@ -53,7 +51,7 @@ services:
 #      traefik.http.services.fronted.loadBalancer.server.port: 3000
 
   proxy:
-    image: traefik:v2.4
+    image: traefik:v2.11
     container_name: donor_reporting_portal_proxy
     command:
       - --api.insecure=true
@@ -68,17 +66,25 @@ services:
       traefik.http.routers.dash.service: api@internal
 
   db:
-    image: postgres:12-alpine
+    image: postgres:18-alpine
     container_name: donor_reporting_portal_db
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: pass
       POSTGRES_DB: donor_reporting_portal
     volumes:
-      - "./volumes/db2/data:/var/lib/postgresql/data"
+      - "drp-db-data:/var/lib/postgresql/data"
+    healthcheck:
+        test: ["CMD-SHELL", "pg_isready -U postgres"]
+        interval: 2s
+        timeout: 2s
+        retries: 10
 
   redis:
-    image: redis:6.2-alpine
+    image: redis:8.4-alpine
     container_name: donor_reporting_portal_redis
     hostname: redis
     command: ["redis-server", "--appendonly", "yes"]
+
+volumes:
+  drp-db-data:
